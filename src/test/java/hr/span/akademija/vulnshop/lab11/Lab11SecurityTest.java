@@ -36,7 +36,7 @@ class Lab11SecurityTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Nakon 5 neuspjelih pokusaja za korisnika 'lockme' i ispravna lozinka mora vratiti 429")
+    @DisplayName("Nakon 5 neuspjelih pokušaja za korisnika 'lockme' i ispravna lozinka mora vratiti 429")
     void zakljucavanjeNakonPetPokusaja() {
         // 5 neuspjelih pokusaja za zasebnog korisnika lockme.
         for (int i = 0; i < 5; i++) {

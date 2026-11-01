@@ -25,7 +25,7 @@ class Lab06SecurityTest extends AbstractLabTest {
     // ----------------------------- Dio A -----------------------------
 
     @Test
-    @DisplayName("Dva korisnika s istom lozinkom moraju imati razlicite hasheve (sol)")
+    @DisplayName("Dva korisnika s istom lozinkom moraju imati različite hasheve (sol)")
     void istaLozinkaRazlicitiHashevi() {
         // Registriraj dva nova korisnika s istom lozinkom.
         rest.postForEntity(url("/api/lab06/register"),
@@ -77,7 +77,7 @@ class Lab06SecurityTest extends AbstractLabTest {
     // ----------------------------- Dio B -----------------------------
 
     @Test
-    @DisplayName("Dvaput isti broj kartice mora dati razlicite ciphertexte (ne ECB)")
+    @DisplayName("Dvaput isti broj kartice mora dati različite ciphertexte (ne ECB)")
     void istaKarticaRazlicitiCiphertext() {
         String c1 = storeCard("4111111111111111");
         String c2 = storeCard("4111111111111111");
@@ -99,7 +99,7 @@ class Lab06SecurityTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Desifriranje hardkodiranim kljucem u ECB modu vise ne daje originalni broj")
+    @DisplayName("Dešifriranje hardkodiranim ključem u ECB modu više ne daje originalni broj")
     void ecbKljucViseNeRadi() {
         String number = "4111111111111111";
         String ciphertext = storeCard(number);

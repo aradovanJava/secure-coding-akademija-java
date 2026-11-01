@@ -24,7 +24,7 @@ class Lab10FunctionalTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Ispravan checkout (1x Kabel 9.99) umanjuje stanje za tocan iznos")
+    @DisplayName("Ispravan checkout (1x Kabel 9.99) umanjuje stanje za točan iznos")
     void ispravanCheckoutUmanjujeStanje() {
         String token = login("ana", "Ana123!");
         BigDecimal prije = balance(token);

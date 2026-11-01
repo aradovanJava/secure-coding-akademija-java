@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 class Lab05FunctionalTest extends AbstractLabTest {
 
     @Test
-    @DisplayName("Obican pozdrav vraca ocekivani tekst s imenom")
+    @DisplayName("Običan pozdrav vraća očekivani tekst s imenom")
     void obicanPozdravRadi() {
         ResponseEntity<Map> response = rest.postForEntity(url("/api/lab05/greeting"),
                 Map.of("name", "Ana"), Map.class);

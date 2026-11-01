@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 class Lab11FunctionalTest extends AbstractLabTest {
 
     @Test
-    @DisplayName("Ispravna prijava korisnika tomislav vraca 200")
+    @DisplayName("Ispravna prijava korisnika tomislav vraća 200")
     void ispravnaPrijava() {
         ResponseEntity<Map> response = rest.postForEntity(url("/api/lab11/login"),
                 Map.of("username", "tomislav", "password", "T0m!slav#2026"), Map.class);

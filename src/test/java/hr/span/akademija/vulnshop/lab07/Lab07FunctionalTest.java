@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 class Lab07FunctionalTest extends AbstractLabTest {
 
     @Test
-    @DisplayName("Pretraga q=Laptop vraca tocno jedan rezultat")
+    @DisplayName("Pretraga q=Laptop vraća točno jedan rezultat")
     void pretragaLaptop() {
         ResponseEntity<List> response = rest.getForEntity(
                 uri("/api/lab07/products/search", "q", "Laptop"), List.class);
@@ -27,7 +27,7 @@ class Lab07FunctionalTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Ispravna prijava racuna admin/SuperTajna2026 vraca 200")
+    @DisplayName("Ispravna prijava računa admin/SuperTajna2026 vraća 200")
     void ispravnaPrijava() {
         ResponseEntity<Map> response = rest.postForEntity(url("/api/lab07/login"),
                 Map.of("username", "admin", "password", "SuperTajna2026"), Map.class);

@@ -27,7 +27,7 @@ class Lab10SecurityTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Negativna kolicina (-5) mora vratiti 400 i NE smije povecati stanje")
+    @DisplayName("Negativna količina (-5) mora vratiti 400 i NE smije povećati stanje")
     void negativnaKolicinaOdbijena() {
         String token = login("marko", "Marko123!");
         BigDecimal prije = balance(token);
@@ -45,7 +45,7 @@ class Lab10SecurityTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Laznom cijenom 0.01 za laptop ne smije se naplatiti 0.01 (cijena dolazi iz baze)")
+    @DisplayName("Lažnom cijenom 0.01 za laptop ne smije se naplatiti 0.01 (cijena dolazi iz baze)")
     void laznaCijenaIgnorirana() {
         String token = login("ana", "Ana123!");
         ResponseEntity<Map> response = postWithToken("/api/lab10/checkout", token, Map.of(

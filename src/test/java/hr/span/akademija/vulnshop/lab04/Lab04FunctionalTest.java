@@ -23,7 +23,7 @@ class Lab04FunctionalTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("/api/lab04/ping vraca 200")
+    @DisplayName("/api/lab04/ping vraća 200")
     void pingRadi() {
         ResponseEntity<String> response = rest.getForEntity(url("/api/lab04/ping"), String.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);

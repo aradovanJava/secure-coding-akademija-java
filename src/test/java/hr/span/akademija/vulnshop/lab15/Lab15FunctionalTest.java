@@ -39,7 +39,7 @@ class Lab15FunctionalTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Ispravan transfer 100 EUR vraca 200 i smanjuje saldo za 100 (mjeri razliku)")
+    @DisplayName("Ispravan transfer 100 EUR vraća 200 i smanjuje saldo za 100 (mjeri razliku)")
     void ispravanTransfer() {
         String token = login("ana", "Ana123!");
         BigDecimal prije = balanceOf(token, "HR-ANA-001");
