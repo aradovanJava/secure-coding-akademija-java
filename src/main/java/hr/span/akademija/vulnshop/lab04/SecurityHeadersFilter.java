@@ -27,8 +27,13 @@ public class SecurityHeadersFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         response.setHeader("X-Content-Type-Options", "nosniff");
         response.setHeader("X-Frame-Options", "DENY");
-        response.setHeader("Content-Security-Policy", "default-src 'self'");
         response.setHeader("Referrer-Policy", "no-referrer");
+        // Zajednicki (baseline) CSP. Lab08 stranice imaju vlastiti, specificniji CSP
+        // (sa script-src/object-src), pa ovdje ne postavljamo CSP za /lab08/** kako ne
+        // bismo dobili dva CSP zaglavlja.
+        if (!request.getRequestURI().startsWith("/lab08")) {
+            response.setHeader("Content-Security-Policy", "default-src 'self'");
+        }
         filterChain.doFilter(request, response);
     }
 }
