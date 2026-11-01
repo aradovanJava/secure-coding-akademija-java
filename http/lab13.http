@@ -1,0 +1,19 @@
+### Lab13 – Nesigurna deserijalizacija
+# Payloade (Base64 Java-serijaliziranih objekata) generira pomocni alat:
+#   mvn -q -DskipTests test-compile
+#   mvn -q exec:java -Dexec.mainClass=hr.span.akademija.vulnshop.lab13.tools.Lab13PayloadGenerator -Dexec.classpathScope=test
+# ili pokreni main metodu klase Lab13PayloadGenerator iz IDE-a. Kopiraj ispis u zahtjeve ispod.
+@host = http://localhost:8080
+
+### 1. Legitimna kosarica (2 stavke) -> itemCount=2
+POST {{host}}/api/lab13/cart/import
+Content-Type: text/plain
+
+PASTE_LEGIT_BASE64_PAYLOAD
+
+### 2. EKSPLOATACIJA: DiagnosticsTask gadget (zapisuje marker datoteku)
+# Ranjivo (main): 200/ok i datoteka nastane. Popravljeno: 400 i datoteka NE nastane.
+POST {{host}}/api/lab13/cart/import
+Content-Type: text/plain
+
+PASTE_ATTACK_BASE64_PAYLOAD

