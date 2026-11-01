@@ -16,8 +16,7 @@ import org.springframework.http.ResponseEntity;
 class Lab09SecurityTest extends AbstractLabTest {
 
     private ResponseEntity<String> ping(String host) {
-        String encoded = java.net.URLEncoder.encode(host, java.nio.charset.StandardCharsets.UTF_8);
-        return rest.getForEntity(url("/api/lab09/ping?host=" + encoded), String.class);
+        return rest.getForEntity(uri("/api/lab09/ping", "host", host), String.class);
     }
 
     @Test

@@ -42,9 +42,11 @@ public class Lab02ProfileController {
 
     @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(@RequestBody ProfileUpdate update, CurrentUser currentUser) {
-        // RANJIVO: role dolazi izravno iz JSON-a i zapisuje se bez provjere.
+        // RANJIVO: role dolazi izravno iz JSON-a i zapisuje se bez provjere (mass assignment).
+        // Ako klijent ne posalje role, zadrzava se postojeca uloga (COALESCE) - legitimni klijent
+        // ne salje role, ali napadac moze poslati role=ADMIN i eskalirati privilegije.
         jdbc.update(
-                "UPDATE lab02_profiles SET display_name = ?, email = ?, role = ? WHERE user_id = ?",
+                "UPDATE lab02_profiles SET display_name = ?, email = ?, role = COALESCE(?, role) WHERE user_id = ?",
                 update.displayName(), update.email(), update.role(), currentUser.id());
         return ResponseEntity.ok(toDto(loadProfile(currentUser.id())));
     }

@@ -18,8 +18,7 @@ class Lab09FunctionalTest extends AbstractLabTest {
     @Test
     @DisplayName("Ispravan host 127.0.0.1 vraca 200 (neovisno o uspjehu pinga)")
     void ispravanHost200() {
-        String encoded = java.net.URLEncoder.encode("127.0.0.1", java.nio.charset.StandardCharsets.UTF_8);
-        ResponseEntity<String> response = rest.getForEntity(url("/api/lab09/ping?host=" + encoded), String.class);
+        ResponseEntity<String> response = rest.getForEntity(uri("/api/lab09/ping", "host", "127.0.0.1"), String.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);
     }
 }

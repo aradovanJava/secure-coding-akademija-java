@@ -20,8 +20,7 @@ class Lab08SecurityTest extends AbstractLabTest {
     @DisplayName("Reflektirani XSS: odgovor ne smije sadrzavati nekodirani <script>")
     void reflektiraniXssKodiran() {
         String payload = "<script>alert(1)</script>";
-        String encoded = java.net.URLEncoder.encode(payload, java.nio.charset.StandardCharsets.UTF_8);
-        ResponseEntity<String> response = rest.getForEntity(url("/lab08/search?q=" + encoded), String.class);
+        ResponseEntity<String> response = rest.getForEntity(uri("/lab08/search", "q", payload), String.class);
         String body = response.getBody() == null ? "" : response.getBody();
         assertThat(body)
                 .as("Nekodirani <script> u odgovoru - reflektirani XSS")
@@ -50,8 +49,7 @@ class Lab08SecurityTest extends AbstractLabTest {
     @Test
     @DisplayName("Odgovor mora imati Content-Security-Policy zaglavlje sa script-src")
     void cspZaglavljePostoji() {
-        String encoded = java.net.URLEncoder.encode("test", java.nio.charset.StandardCharsets.UTF_8);
-        ResponseEntity<String> response = rest.getForEntity(url("/lab08/search?q=" + encoded), String.class);
+        ResponseEntity<String> response = rest.getForEntity(uri("/lab08/search", "q", "test"), String.class);
         String csp = response.getHeaders().getFirst("Content-Security-Policy");
         assertThat(csp)
                 .as("Nedostaje CSP zaglavlje")

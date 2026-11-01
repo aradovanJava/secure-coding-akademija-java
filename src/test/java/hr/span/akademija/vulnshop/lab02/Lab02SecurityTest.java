@@ -38,7 +38,8 @@ class Lab02SecurityTest extends AbstractLabTest {
         putWithToken("/api/lab02/profile", token,
                 Map.of("displayName", "Marko", "email", "m@x.hr", "role", "ADMIN"), Map.class);
 
-        ResponseEntity<Map> response = getWithToken("/api/lab02/admin/users", token, Map.class);
+        // Citamo kao String da izbjegnemo deserijalizaciju (na main se vraca JSON lista, na rjesenja 403 objekt).
+        ResponseEntity<String> response = getWithToken("/api/lab02/admin/users", token, String.class);
         assertThat(response.getStatusCode().value())
                 .as("Marko je dobio pristup admin popisu korisnika")
                 .isEqualTo(403);

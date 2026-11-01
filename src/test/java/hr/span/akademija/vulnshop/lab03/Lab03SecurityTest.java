@@ -21,8 +21,7 @@ class Lab03SecurityTest extends AbstractLabTest {
     private static final String SECRET = "Sup3rTajn0!";
 
     private ResponseEntity<String> preview(String token, String targetUrl) {
-        String encoded = java.net.URLEncoder.encode(targetUrl, java.nio.charset.StandardCharsets.UTF_8);
-        return getWithToken("/api/lab03/preview?url=" + encoded, token, String.class);
+        return getWithToken(uri("/api/lab03/preview", "url", targetUrl), token, String.class);
     }
 
     @Test

@@ -20,9 +20,8 @@ class Lab07FunctionalTest extends AbstractLabTest {
     @Test
     @DisplayName("Pretraga q=Laptop vraca tocno jedan rezultat")
     void pretragaLaptop() {
-        String encoded = java.net.URLEncoder.encode("Laptop", java.nio.charset.StandardCharsets.UTF_8);
         ResponseEntity<List> response = rest.getForEntity(
-                url("/api/lab07/products/search?q=" + encoded), List.class);
+                uri("/api/lab07/products/search", "q", "Laptop"), List.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(response.getBody()).hasSize(1);
     }

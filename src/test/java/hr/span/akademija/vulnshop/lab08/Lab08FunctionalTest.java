@@ -19,8 +19,7 @@ class Lab08FunctionalTest extends AbstractLabTest {
     @Test
     @DisplayName("Obicna pretraga prikazuje uneseni pojam")
     void obicnaPretraga() {
-        String encoded = java.net.URLEncoder.encode("Laptop", java.nio.charset.StandardCharsets.UTF_8);
-        ResponseEntity<String> response = rest.getForEntity(url("/lab08/search?q=" + encoded), String.class);
+        ResponseEntity<String> response = rest.getForEntity(uri("/lab08/search", "q", "Laptop"), String.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);
         assertThat(response.getBody()).contains("Laptop");
     }

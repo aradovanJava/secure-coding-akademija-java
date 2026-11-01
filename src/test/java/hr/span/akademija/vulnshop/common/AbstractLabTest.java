@@ -1,5 +1,6 @@
 package hr.span.akademija.vulnshop.common;
 
+import java.net.URI;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Zajednicka baza za sve laboratorijske testove.
@@ -37,6 +39,23 @@ public abstract class AbstractLabTest {
         return baseUrl() + path;
     }
 
+    /**
+     * Gradi apsolutni URI s TOCNO JEDNOM enkodiranom query vrijednoscu.
+     *
+     * Vazno: {@link TestRestTemplate} enkodira String URL-ove, pa bi rucno
+     * prethodno enkodiranje (URLEncoder) dovelo do DVOSTRUKOG enkodiranja
+     * (npr. {@code %3A} -> {@code %253A}) i payload nikada ne bi stigao do
+     * kontrolera u izvornom obliku. Zato ovdje vracamo vec izgradeni {@link URI}
+     * koji RestTemplate salje bez dodatne obrade.
+     */
+    protected URI uri(String path, String queryParam, String rawValue) {
+        return UriComponentsBuilder.fromUriString(baseUrl() + path)
+                .queryParam(queryParam, rawValue)
+                .build()
+                .encode()
+                .toUri();
+    }
+
     /** Prijavljuje korisnika preko zajednickog /api/auth/login i vraca token. */
     protected String login(String username, String password) {
         ResponseEntity<Map> response = rest.postForEntity(
@@ -62,6 +81,11 @@ public abstract class AbstractLabTest {
     protected <T> ResponseEntity<T> getWithToken(String path, String token, Class<T> type) {
         return rest.exchange(url(path), HttpMethod.GET,
                 new HttpEntity<>(bearer(token)), type);
+    }
+
+    /** GET na vec izgradeni URI (bez dodatnog enkodiranja), s Bearer tokenom. */
+    protected <T> ResponseEntity<T> getWithToken(URI uri, String token, Class<T> type) {
+        return rest.exchange(uri, HttpMethod.GET, new HttpEntity<>(bearer(token)), type);
     }
 
     /** POST s Bearer tokenom i JSON tijelom. */

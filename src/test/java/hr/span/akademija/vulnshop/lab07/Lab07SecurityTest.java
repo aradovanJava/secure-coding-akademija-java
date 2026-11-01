@@ -19,9 +19,9 @@ class Lab07SecurityTest extends AbstractLabTest {
 
     @SuppressWarnings("unchecked")
     private List<Map<String, Object>> search(String q) {
-        String encoded = java.net.URLEncoder.encode(q, java.nio.charset.StandardCharsets.UTF_8);
+        // uri(...) enkodira TOCNO jednom; TestRestTemplate ne dira gotov URI.
         ResponseEntity<List> response = rest.getForEntity(
-                url("/api/lab07/products/search?q=" + encoded), List.class);
+                uri("/api/lab07/products/search", "q", q), List.class);
         return response.getBody();
     }
 

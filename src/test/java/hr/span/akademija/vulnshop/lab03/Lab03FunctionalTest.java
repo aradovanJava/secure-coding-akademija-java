@@ -20,9 +20,8 @@ class Lab03FunctionalTest extends AbstractLabTest {
     void ftpShemaNije200() {
         String token = login("ana", "Ana123!");
         // 127.0.0.1 na FTP portu nema slusatelja -> veza se odbija odmah (brz i stabilan test).
-        String encoded = java.net.URLEncoder.encode("ftp://127.0.0.1/datoteka",
-                java.nio.charset.StandardCharsets.UTF_8);
-        ResponseEntity<String> response = getWithToken("/api/lab03/preview?url=" + encoded, token, String.class);
+        ResponseEntity<String> response = getWithToken(
+                uri("/api/lab03/preview", "url", "ftp://127.0.0.1/datoteka"), token, String.class);
         // Funkcionalni test smije provjeriti samo da nije 200 (ranjivi i sigurni kod oba vracaju gresku).
         assertThat(response.getStatusCode().value()).isNotEqualTo(200);
     }
@@ -30,9 +29,8 @@ class Lab03FunctionalTest extends AbstractLabTest {
     @Test
     @DisplayName("Bez tokena pregled poveznice vraca 401")
     void bezTokena401() {
-        String encoded = java.net.URLEncoder.encode("http://example.com",
-                java.nio.charset.StandardCharsets.UTF_8);
-        ResponseEntity<String> response = getWithToken("/api/lab03/preview?url=" + encoded, null, String.class);
+        ResponseEntity<String> response = getWithToken(
+                uri("/api/lab03/preview", "url", "http://example.com"), null, String.class);
         assertThat(response.getStatusCode().value()).isEqualTo(401);
     }
 }
