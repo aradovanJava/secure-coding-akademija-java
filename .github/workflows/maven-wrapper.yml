@@ -1,0 +1,42 @@
+name: Generiraj Maven Wrapper
+
+# Jednokratni workflow: generira Maven Wrapper (mvnw, mvnw.cmd, .mvn/) i commita ga
+# natrag na granu. Pokrece se rucno (workflow_dispatch) jer sandbox nema pristup Maven Centralu.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  wrapper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Postavi JDK 21 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Generiraj wrapper (samo skripte)
+        run: mvn -N -B -ntp wrapper:wrapper -Dtype=only-script
+
+      - name: Commitaj wrapper natrag
+        run: |
+          git config user.name "Aleksander Radovan"
+          git config user.email "aleksander.radovan@gmail.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add mvnw mvnw.cmd .mvn
+            printf '%s\n\n%s\n%s\n' \
+              "Dodaj Maven Wrapper (generiran kroz GitHub Actions)" \
+              "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" \
+              "Claude-Session: https://claude.ai/code/session_01XPnKLU6QN1RaaAunq9Gqxa" > /tmp/wrapper_msg.txt
+            git commit -F /tmp/wrapper_msg.txt
+            git push
+          else
+            echo "Nema promjena (wrapper vec postoji)."
+          fi

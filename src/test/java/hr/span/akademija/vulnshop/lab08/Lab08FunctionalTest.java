@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 class Lab08FunctionalTest extends AbstractLabTest {
 
     @Test
-    @DisplayName("Obicna pretraga prikazuje uneseni pojam")
+    @DisplayName("Obična pretraga prikazuje uneseni pojam")
     void obicnaPretraga() {
         ResponseEntity<String> response = rest.getForEntity(uri("/lab08/search", "q", "Laptop"), String.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);
@@ -25,7 +25,7 @@ class Lab08FunctionalTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Obicna recenzija se sprema i prikazuje")
+    @DisplayName("Obična recenzija se sprema i prikazuje")
     void obicnaRecenzija() {
         long productId = 700 + (System.nanoTime() % 1000);
         ResponseEntity<Map> add = rest.postForEntity(url("/api/lab08/reviews"),

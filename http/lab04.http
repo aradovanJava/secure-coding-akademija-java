@@ -1,0 +1,25 @@
+### Lab04 – Security Misconfiguration
+@host = http://localhost:8080
+
+### 1. EKSPLOATACIJA: actuator/env otkriva tajne
+# Ranjivo (main): 200 + app.payment.api-key. Popravljeno: 404.
+GET {{host}}/actuator/env
+
+### 2. EKSPLOATACIJA: trazenje konkretnog kljuca
+GET {{host}}/actuator/env/app.payment.api-key
+
+### 3. /crash – stack trace u odgovoru?
+# Ranjivo (main): 500 + stack trace i poruka. Popravljeno: 500 bez detalja.
+GET {{host}}/api/lab04/crash
+
+### 4. CORS preflight sa zlonamjernog origina
+# Ranjivo (main): Access-Control-Allow-Origin odrazava evil origin. Popravljeno: nema tog zaglavlja.
+OPTIONS {{host}}/api/lab04/ping
+Origin: https://evil.example
+Access-Control-Request-Method: GET
+
+### 5. ping – provjeri sigurnosna zaglavlja u odgovoru (nosniff, X-Frame-Options)
+GET {{host}}/api/lab04/ping
+
+### 6. Zdravo stanje (radi na obje grane)
+GET {{host}}/actuator/health

@@ -23,7 +23,7 @@ import org.springframework.http.ResponseEntity;
 class Lab13SecurityTest extends AbstractLabTest {
 
     @Test
-    @DisplayName("Napadacki payload (DiagnosticsTask) mora vratiti 400 i NE smije stvoriti marker datoteku")
+    @DisplayName("Napadački payload (DiagnosticsTask) mora vratiti 400 i NE smije stvoriti marker datoteku")
     void napadackiPayloadOdbijen() throws Exception {
         Path marker = Files.createTempFile("lab13_test_", ".txt");
         Files.deleteIfExists(marker); // zelimo da je NEMA prije napada

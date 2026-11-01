@@ -86,6 +86,10 @@ mvn test -Dgroups=security
 mvn test -Dgroups=lab07
 ```
 
+> **Maven Wrapper:** repozitorij sadrži `mvnw` (Linux/macOS) i `mvnw.cmd` (Windows), pa ne moraš imati
+> zasebno instaliran Maven — samo zamijeni `mvn` s `./mvnw` (ili `mvnw` na Windowsu), npr.
+> `./mvnw spring-boot:run`, `./mvnw test -Dgroups=security`. IntelliJ i VS Code automatski ga prepoznaju.
+
 ### PowerShell: curl
 
 U PowerShell-u je `curl` alias za `Invoke-WebRequest` i ima drukčiju sintaksu. Koristi **`curl.exe`**

@@ -32,7 +32,7 @@ class Lab02SecurityTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Marko ne smije pristupiti admin/users ni nakon pokusaja eskalacije (403)")
+    @DisplayName("Marko ne smije pristupiti admin/users ni nakon pokušaja eskalacije (403)")
     void markoNemaPristupAdminUsers() {
         String token = login("marko", "Marko123!");
         putWithToken("/api/lab02/profile", token,

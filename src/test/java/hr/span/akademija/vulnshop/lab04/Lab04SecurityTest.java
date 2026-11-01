@@ -33,7 +33,7 @@ class Lab04SecurityTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("/api/lab04/crash vraca 500 bez stack tracea i naziva paketa")
+    @DisplayName("/api/lab04/crash vraća 500 bez stack tracea i naziva paketa")
     void crashBezStackTracea() {
         ResponseEntity<String> response = rest.getForEntity(url("/api/lab04/crash"), String.class);
         String body = response.getBody() == null ? "" : response.getBody();

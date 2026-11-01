@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 class Lab03FunctionalTest extends AbstractLabTest {
 
     @Test
-    @DisplayName("Nepodrzana shema ftp:// ne smije vratiti 200")
+    @DisplayName("Nepodržana shema ftp:// ne smije vratiti 200")
     void ftpShemaNije200() {
         String token = login("ana", "Ana123!");
         // 127.0.0.1 na FTP portu nema slusatelja -> veza se odbija odmah (brz i stabilan test).
@@ -27,7 +27,7 @@ class Lab03FunctionalTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Bez tokena pregled poveznice vraca 401")
+    @DisplayName("Bez tokena pregled poveznice vraća 401")
     void bezTokena401() {
         ResponseEntity<String> response = getWithToken(
                 uri("/api/lab03/preview", "url", "http://example.com"), null, String.class);

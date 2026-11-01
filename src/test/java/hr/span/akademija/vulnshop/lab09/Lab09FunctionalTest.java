@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 class Lab09FunctionalTest extends AbstractLabTest {
 
     @Test
-    @DisplayName("Ispravan host 127.0.0.1 vraca 200 (neovisno o uspjehu pinga)")
+    @DisplayName("Ispravan host 127.0.0.1 vraća 200 (neovisno o uspjehu pinga)")
     void ispravanHost200() {
         ResponseEntity<String> response = rest.getForEntity(uri("/api/lab09/ping", "host", "127.0.0.1"), String.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);

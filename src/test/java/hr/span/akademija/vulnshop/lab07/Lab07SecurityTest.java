@@ -38,7 +38,7 @@ class Lab07SecurityTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("UNION payload ne smije vratiti korisnicka imena/lozinke iz lab07_accounts")
+    @DisplayName("UNION payload ne smije vratiti korisnička imena/lozinke iz lab07_accounts")
     void unionNeOtkrivaRacune() {
         List<Map<String, Object>> rows = search("%' UNION SELECT id, username, password, 0 FROM lab07_accounts --");
         boolean sadrziLozinku = rows != null && rows.stream()

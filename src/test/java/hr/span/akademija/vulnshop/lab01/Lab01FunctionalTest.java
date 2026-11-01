@@ -34,7 +34,7 @@ class Lab01FunctionalTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Bez tokena dohvat narudzbe vraca 401")
+    @DisplayName("Bez tokena dohvat narudzbe vraća 401")
     void bezTokena401() {
         ResponseEntity<Map> response = getWithToken("/api/lab01/orders/1001", null, Map.class);
         assertThat(response.getStatusCode().value()).isEqualTo(401);

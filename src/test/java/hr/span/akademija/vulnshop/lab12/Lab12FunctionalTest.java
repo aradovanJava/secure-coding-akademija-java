@@ -32,7 +32,7 @@ class Lab12FunctionalTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Prijava pa /me vraca 200 s valjanim tokenom")
+    @DisplayName("Prijava pa /me vraća 200 s valjanim tokenom")
     void loginPaMe() {
         String token = lab12Login("ana", "Ana123!");
         ResponseEntity<String> response = get("/api/lab12/me", token);
@@ -48,7 +48,7 @@ class Lab12FunctionalTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("ADMIN prijava pa /admin vraca 200")
+    @DisplayName("ADMIN prijava pa /admin vraća 200")
     void adminNaAdmin200() {
         String token = lab12Login("admin", "Admin123!");
         ResponseEntity<String> response = get("/api/lab12/admin", token);

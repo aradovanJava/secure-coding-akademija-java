@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 class Lab13FunctionalTest extends AbstractLabTest {
 
     @Test
-    @DisplayName("Legitimna kosarica s 2 stavke vraca 200 i itemCount=2")
+    @DisplayName("Legitimna košarica s 2 stavke vraća 200 i itemCount=2")
     void legitimnaKosarica() {
         String payload = Lab13PayloadGenerator.legitimateCartPayload();
         ResponseEntity<Map> response = rest.postForEntity(url("/api/lab13/cart/import"), payload, Map.class);

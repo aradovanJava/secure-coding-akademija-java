@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 class Lab06FunctionalTest extends AbstractLabTest {
 
     @Test
-    @DisplayName("Registracija i prijava tocnom lozinkom rade (200), kriva lozinka 401")
+    @DisplayName("Registracija i prijava točnom lozinkom rade (200), kriva lozinka 401")
     void registracijaIPrijava() {
         String username = "func_" + System.nanoTime();
         ResponseEntity<Map> reg = rest.postForEntity(url("/api/lab06/register"),
@@ -34,7 +34,7 @@ class Lab06FunctionalTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Maskirani prikaz kartice vraca zadnje 4 znamenke")
+    @DisplayName("Maskirani prikaz kartice vraća zadnje 4 znamenke")
     void maskiranaKarticaRadi() {
         ResponseEntity<Map> store = rest.postForEntity(url("/api/lab06/cards"),
                 Map.of("cardNumber", "4242424242424242"), Map.class);

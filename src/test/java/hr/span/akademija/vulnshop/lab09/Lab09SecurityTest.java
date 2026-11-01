@@ -20,7 +20,7 @@ class Lab09SecurityTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Payload '127.0.0.1 & echo PWNED_LAB09' mora vratiti 400 bez izvrsenja naredbe")
+    @DisplayName("Payload '127.0.0.1 & echo PWNED_LAB09' mora vratiti 400 bez izvršenja naredbe")
     void nadovezivanjeAmpersandBlokirano() {
         ResponseEntity<String> response = ping("127.0.0.1 & echo PWNED_LAB09");
         String body = response.getBody() == null ? "" : response.getBody();

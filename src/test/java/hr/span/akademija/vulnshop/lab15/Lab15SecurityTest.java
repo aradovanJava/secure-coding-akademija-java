@@ -60,7 +60,7 @@ class Lab15SecurityTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Transfer na nepostojeci racun mora ostaviti saldo nepromijenjen (transakcija)")
+    @DisplayName("Transfer na nepostojeći račun mora ostaviti saldo nepromijenjen (transakcija)")
     void nemaGubitkaBezTransakcije() {
         String token = login("ana", "Ana123!");
         BigDecimal prije = balanceOf(token, "HR-ANA-001");
@@ -76,7 +76,7 @@ class Lab15SecurityTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Tijelo greske ne smije sadrzavati naziv klase iznimke ni SQL")
+    @DisplayName("Tijelo greške ne smije sadrzavati naziv klase iznimke ni SQL")
     void greskaNeProcurujeDetalje() {
         String token = login("ana", "Ana123!");
         ResponseEntity<String> response = postWithToken("/api/lab15/transfer", token, Map.of(
