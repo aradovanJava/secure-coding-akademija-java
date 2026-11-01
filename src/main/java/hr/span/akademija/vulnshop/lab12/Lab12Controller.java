@@ -82,7 +82,7 @@ public class Lab12Controller {
             return null;
         }
         String token = authHeader.substring("Bearer ".length()).trim();
-        // RANJIVO: koristi se verifyVulnerable.
-        return jwtService.verifyVulnerable(token);
+        // POPRAVAK: koristi se sigurna verifikacija (allowlista HS256, konstantno vrijeme, provjera exp).
+        return jwtService.verify(token);
     }
 }

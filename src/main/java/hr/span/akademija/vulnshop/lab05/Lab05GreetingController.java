@@ -1,7 +1,6 @@
 package hr.span.akademija.vulnshop.lab05;
 
 import java.util.Map;
-import org.apache.commons.text.StringSubstitutor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,9 +27,10 @@ public class Lab05GreetingController {
     @PostMapping("/greeting")
     public ResponseEntity<?> greeting(@RequestBody GreetingRequest request) {
         String name = request.name() == null ? "" : request.name();
-        // RANJIVO: interpolator obraduje ${...} obrasce iz korisnickog unosa.
-        StringSubstitutor interpolator = StringSubstitutor.createInterpolator();
-        String greeting = interpolator.replace("Pozdrav, " + name + "!");
+        // POPRAVAK: korisnicki unos se NE interpolira. Obicna konkatenacija (mogli bismo i
+        // String.format) znaci da ${...} obrasci ostaju doslovan tekst. Uz to je commons-text
+        // podignut na >= 1.10.0 (vidi pom.xml), pa ni interpolator vise ne bi bio ranjiv.
+        String greeting = "Pozdrav, " + name + "!";
         return ResponseEntity.ok(Map.of("greeting", greeting));
     }
 }

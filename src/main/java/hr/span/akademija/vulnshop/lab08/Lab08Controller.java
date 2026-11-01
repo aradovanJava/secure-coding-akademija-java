@@ -11,16 +11,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.HtmlUtils;
 
 /**
- * Lab08 – A05 Injection: Cross-Site Scripting (CWE-79).
+ * Lab08 – A05 Injection: Cross-Site Scripting (CWE-79) (POPRAVLJENO).
  *
- * RANJIVO: HTML stranice se grade konkatenacijom stringova s korisnickim unosom,
- * bez kodiranja izlaza. Reflektirani XSS u pretrazi ({@code /lab08/search}) i
- * pohranjeni XSS u recenzijama ({@code /lab08/products/{id}/reviews}).
+ * POPRAVAK: sav korisnicki unos koji se upisuje u HTML kodira se kontekstualno
+ * ({@link HtmlUtils#htmlEscape(String)}), pa {@code <script>} postaje {@code &lt;script&gt;}.
+ * Dodatno se salje restriktivni {@code Content-Security-Policy} kao druga crta obrane.
  */
 @RestController
 public class Lab08Controller {
+
+    private static final String CSP = "default-src 'self'; script-src 'self'; object-src 'none'";
 
     private final JdbcTemplate jdbc;
 
@@ -28,14 +31,18 @@ public class Lab08Controller {
         this.jdbc = jdbc;
     }
 
-    /** RANJIVO: reflektirani XSS – q se upisuje izravno u HTML. */
     @GetMapping(value = "/lab08/search", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> search(@RequestParam(defaultValue = "") String q) {
+        // POPRAVAK: kodiranje izlaza prije upisa u HTML.
+        String safe = HtmlUtils.htmlEscape(q);
         String html = "<!DOCTYPE html><html lang=\"hr\"><head><meta charset=\"UTF-8\">"
                 + "<title>Pretraga</title></head><body>"
-                + "<h1>Rezultati pretrage za: " + q + "</h1>"
+                + "<h1>Rezultati pretrage za: " + safe + "</h1>"
                 + "</body></html>";
-        return ResponseEntity.ok().contentType(MediaType.TEXT_HTML).body(html);
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_HTML)
+                .header("Content-Security-Policy", CSP)
+                .body(html);
     }
 
     public record ReviewRequest(long productId, String author, String text) {
@@ -48,7 +55,6 @@ public class Lab08Controller {
         return ResponseEntity.ok(Map.of("status", "spremljeno"));
     }
 
-    /** RANJIVO: pohranjeni XSS – author i text se upisuju izravno u HTML. */
     @GetMapping(value = "/lab08/products/{id}/reviews", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> reviews(@PathVariable long id) {
         List<Map<String, Object>> rows = jdbc.queryForList(
@@ -58,10 +64,16 @@ public class Lab08Controller {
                 .append("<title>Recenzije</title></head><body>")
                 .append("<h1>Recenzije za proizvod ").append(id).append("</h1>");
         for (Map<String, Object> row : rows) {
-            html.append("<div class=\"review\"><strong>").append(row.get("author")).append("</strong>: ")
-                    .append(row.get("text")).append("</div>");
+            // POPRAVAK: i author i text se kodiraju pri ispisu.
+            String author = HtmlUtils.htmlEscape(String.valueOf(row.get("author")));
+            String text = HtmlUtils.htmlEscape(String.valueOf(row.get("text")));
+            html.append("<div class=\"review\"><strong>").append(author).append("</strong>: ")
+                    .append(text).append("</div>");
         }
         html.append("</body></html>");
-        return ResponseEntity.ok().contentType(MediaType.TEXT_HTML).body(html.toString());
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_HTML)
+                .header("Content-Security-Policy", CSP)
+                .body(html.toString());
     }
 }

@@ -19,9 +19,10 @@
 
     <properties>
         <java.version>21</java.version>
-        <!-- Namjerno ranjiva verzija commons-text (CVE-2022-42889 "Text4Shell") za lab05.
-             Na grani rjesenja se podize na >= 1.10.0 (vidi docs/labs/lab05). -->
-        <commons-text.version>1.9</commons-text.version>
+        <!-- POPRAVAK (lab05): commons-text podignut na sigurnu verziju (>= 1.10.0).
+             CVE-2022-42889 "Text4Shell" ispravljen je u 1.10.0 (StringLookupFactory vise
+             ne ukljucuje opasne lookupove po defaultu). -->
+        <commons-text.version>1.13.0</commons-text.version>
     </properties>
 
     <dependencies>

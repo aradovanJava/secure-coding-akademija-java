@@ -1,6 +1,7 @@
 package hr.span.akademija.vulnshop.lab12;
 
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.Base64;
 import javax.crypto.Mac;
@@ -45,7 +46,45 @@ public class JwtService {
     }
 
     /**
-     * RANJIVA verifikacija. NE koristi se na grani rjesenja.
+     * POPRAVAK: sigurna verifikacija.
+     *  - allowlista algoritma: prihvaca se SAMO HS256 (alg:none se odbija),
+     *  - potpis se provjerava u konstantnom vremenu ({@link MessageDigest#isEqual}),
+     *  - provjerava se istek ({@code exp}).
+     */
+    public VerifiedToken verify(String token) {
+        try {
+            String[] parts = token.split("\\.");
+            if (parts.length != 3) {
+                return null;
+            }
+            String headerJson = new String(base64UrlDecode(parts[0]), StandardCharsets.UTF_8);
+            String alg = extractString(headerJson, "alg");
+            // POPRAVAK: dopusten je samo HS256 (odbija alg:none i druge).
+            if (!"HS256".equals(alg)) {
+                return null;
+            }
+            byte[] expected = hmacSha256(parts[0] + "." + parts[1], secret);
+            byte[] actual = base64UrlDecode(parts[2]);
+            // POPRAVAK: usporedba u konstantnom vremenu.
+            if (!MessageDigest.isEqual(expected, actual)) {
+                return null;
+            }
+            String payloadJson = new String(base64UrlDecode(parts[1]), StandardCharsets.UTF_8);
+            // POPRAVAK: provjera isteka.
+            Long exp = extractLong(payloadJson, "exp");
+            if (exp == null || Instant.now().getEpochSecond() > exp) {
+                return null;
+            }
+            String sub = extractString(payloadJson, "sub");
+            String role = extractString(payloadJson, "role");
+            return new VerifiedToken(sub, role);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * RANJIVA verifikacija. Zadrzana radi usporedbe u uputama; NE koristi se na grani rjesenja.
      */
     public VerifiedToken verifyVulnerable(String token) {
         try {
@@ -121,5 +160,34 @@ public class JwtService {
             return null;
         }
         return json.substring(start, end);
+    }
+
+    /** Izvlaci numericku (npr. exp, iat) vrijednost iz plosnog JSON-a. */
+    static Long extractLong(String json, String key) {
+        String needle = "\"" + key + "\"";
+        int idx = json.indexOf(needle);
+        if (idx < 0) {
+            return null;
+        }
+        int colon = json.indexOf(':', idx + needle.length());
+        if (colon < 0) {
+            return null;
+        }
+        int i = colon + 1;
+        while (i < json.length() && Character.isWhitespace(json.charAt(i))) {
+            i++;
+        }
+        int start = i;
+        while (i < json.length() && (Character.isDigit(json.charAt(i)) || json.charAt(i) == '-')) {
+            i++;
+        }
+        if (i == start) {
+            return null;
+        }
+        try {
+            return Long.parseLong(json.substring(start, i));
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }

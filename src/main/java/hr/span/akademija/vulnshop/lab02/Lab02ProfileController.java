@@ -2,6 +2,10 @@ package hr.span.akademija.vulnshop.lab02;
 
 import hr.span.akademija.vulnshop.common.CurrentUser;
 import hr.span.akademija.vulnshop.common.ForbiddenException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.Map;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +34,13 @@ public class Lab02ProfileController {
         this.jdbc = jdbc;
     }
 
-    /** RANJIVO: binda se i {@code role} iz tijela zahtjeva. */
-    public record ProfileUpdate(String displayName, String email, String role) {
+    /**
+     * POPRAVAK: DTO sadrzi SAMO polja koja korisnik smije mijenjati (bez {@code role}).
+     * Uloga se ne moze postaviti kroz ovaj endpoint pa je mass assignment nemoguc.
+     */
+    public record ProfileUpdate(
+            @NotBlank @Size(max = 200) String displayName,
+            @NotBlank @Email @Size(max = 200) String email) {
     }
 
     @GetMapping("/profile")
@@ -41,13 +50,12 @@ public class Lab02ProfileController {
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<?> updateProfile(@RequestBody ProfileUpdate update, CurrentUser currentUser) {
-        // RANJIVO: role dolazi izravno iz JSON-a i zapisuje se bez provjere (mass assignment).
-        // Ako klijent ne posalje role, zadrzava se postojeca uloga (COALESCE) - legitimni klijent
-        // ne salje role, ali napadac moze poslati role=ADMIN i eskalirati privilegije.
+    public ResponseEntity<?> updateProfile(@Valid @RequestBody ProfileUpdate update, CurrentUser currentUser) {
+        // POPRAVAK: azuriramo SAMO displayName i email; role se nikad ne dira kroz ovaj endpoint.
+        // Promjena uloge ide iskljucivo kroz zaseban administratorski proces.
         jdbc.update(
-                "UPDATE lab02_profiles SET display_name = ?, email = ?, role = COALESCE(?, role) WHERE user_id = ?",
-                update.displayName(), update.email(), update.role(), currentUser.id());
+                "UPDATE lab02_profiles SET display_name = ?, email = ? WHERE user_id = ?",
+                update.displayName(), update.email(), currentUser.id());
         return ResponseEntity.ok(toDto(loadProfile(currentUser.id())));
     }
 

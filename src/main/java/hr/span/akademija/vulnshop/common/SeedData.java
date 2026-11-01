@@ -78,11 +78,12 @@ public class SeedData implements CommandLineRunner {
     private void seedLab06() {
         jdbc.update("DELETE FROM lab06_customers");
         jdbc.update("DELETE FROM lab06_cards");
-        // Namjerno nesigurno: MD5(hex, bez soli). maja i ivan imaju istu lozinku -> isti hash.
-        insertLab06Customer("ivan", md5Hex("123456"));
-        insertLab06Customer("petra", md5Hex("password"));
-        insertLab06Customer("luka", md5Hex("qwerty"));
-        insertLab06Customer("maja", md5Hex("123456"));
+        // POPRAVAK (grana rjesenja): seed se hashira BCryptom (soljeno, sporo).
+        // Iste lozinke (ivan i maja = 123456) sada daju RAZLICITE hasheve.
+        insertLab06Customer("ivan", encoder.encode("123456"));
+        insertLab06Customer("petra", encoder.encode("password"));
+        insertLab06Customer("luka", encoder.encode("qwerty"));
+        insertLab06Customer("maja", encoder.encode("123456"));
     }
 
     private void insertLab06Customer(String username, String passwordHash) {

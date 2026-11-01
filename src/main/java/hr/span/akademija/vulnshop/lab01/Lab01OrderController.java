@@ -34,8 +34,13 @@ public class Lab01OrderController {
         if (rows.isEmpty()) {
             return ResponseEntity.status(404).body(Map.of("error", "Narudzba nije pronadena."));
         }
-        // RANJIVO: ne provjerava se je li currentUser vlasnik narudzbe niti je li ADMIN.
         Map<String, Object> row = rows.get(0);
+        // POPRAVAK: provjera vlasnistva. Ako narudzba nije korisnikova, a korisnik nije ADMIN,
+        // vracamo 404 (ne 403) kako ne bismo otkrili postojanje tude narudzbe.
+        String owner = (String) row.get("owner_username");
+        if (!currentUser.username().equals(owner) && !currentUser.isAdmin()) {
+            return ResponseEntity.status(404).body(Map.of("error", "Narudzba nije pronadena."));
+        }
         return ResponseEntity.ok(toDto(row));
     }
 
