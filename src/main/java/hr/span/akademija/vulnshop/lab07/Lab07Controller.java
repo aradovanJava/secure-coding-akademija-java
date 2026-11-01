@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * RANJIVO: i pretraga proizvoda i prijava grade SQL upit konkatenacijom
  * korisnickog unosa. Napadac moze dohvatiti skrivene proizvode
- * ({@code %' OR '1'='1}), izvuci podatke drugih tablica (UNION) ili zaobici
+ * ({@code ' OR '1'='1' --}), izvuci podatke drugih tablica (UNION) ili zaobici
  * prijavu ({@code admin'--}).
  */
 @RestController
