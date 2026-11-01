@@ -26,9 +26,9 @@ class Lab07SecurityTest extends AbstractLabTest {
     }
 
     @Test
-    @DisplayName("Payload ' OR '1'='1 ne smije otkriti skriveni proizvod (Interni prototip X)")
+    @DisplayName("Payload ' OR '1'='1' -- ne smije otkriti skriveni proizvod (Interni prototip X)")
     void orInjectionNeOtkrivaSkriveno() {
-        List<Map<String, Object>> rows = search("%' OR '1'='1");
+        List<Map<String, Object>> rows = search("' OR '1'='1' --");
         boolean sadrziSkriveni = rows != null && rows.stream()
                 .anyMatch(r -> String.valueOf(r.get("name")).contains("prototip")
                         || String.valueOf(r.get("NAME")).contains("prototip"));

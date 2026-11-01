@@ -23,11 +23,20 @@ Pretraga gradi: `... WHERE hidden = FALSE AND name LIKE '%" + q + "%'`. Prijava 
 
 ## 4. Eksploatacija – korak po korak
 
-1. **Skriveni proizvodi:** `q = %' OR '1'='1`
+1. **Skriveni proizvodi:** `q = ' OR '1'='1' --`
    ```
-   GET /api/lab07/products/search?q=%25%27%20OR%20%271%27%3D%271
+   GET /api/lab07/products/search?q=%27%20OR%20%271%27%3D%271%27%20--
    ```
-   **Očekivano (ranjivo):** u rezultatima se pojavi „Interni prototip X".
+   Nastali upit:
+   ```sql
+   SELECT id, name, description, price FROM lab07_products
+   WHERE hidden = FALSE AND name LIKE '%' OR '1'='1' --%'
+   ```
+   `AND` ima prednost pred `OR`, pa je uvjet `(hidden = FALSE AND ...) OR '1'='1'` – istinit za **svaki** redak.
+   **Očekivano (ranjivo):** u rezultatima se pojavi „Interni prototip X". Varijanta `%' OR 1=1 --` daje isti učinak.
+   > **Zašto `--` na kraju?** Bez komentara (`%' OR '1'='1`) ostaje višak `%'` iz izvornog upita pa nastaje
+   > uvjet `'1'='1%'`, koji je lažan – skriveni proizvod se **ne** pojavi. Zato napadač ostatak naredbe
+   > „zakomentira”. Isprobajte obje varijante i usporedite odgovore.
 2. **UNION – izvlačenje računa:** `q = %' UNION SELECT id, username, password, 0 FROM lab07_accounts --`
    → vraća `SuperTajna2026`, `Shop!2026`.
 3. **Zaobilazak prijave:** `username = admin'--`, bilo koja lozinka → (ranjivo) 200.
@@ -81,7 +90,7 @@ private String escapeLike(String input) {
 ## 7. Provjera popravka
 
 1. `mvn test -Dgroups=lab07`
-   - Prije: `' OR '1'='1` otkriva skriveni proizvod, UNION izvlači lozinke, `admin'--` prolazi → **padaju**.
+   - Prije: `' OR '1'='1' --` otkriva skriveni proizvod, UNION izvlači lozinke, `admin'--` prolazi → **padaju**.
    - Poslije: skriveni proizvod se ne pojavljuje, UNION ne vraća lozinke, `admin'--` → **401**. Funkcionalni
      (`q=Laptop` → 1 rezultat; ispravna prijava → 200) prolaze.
 
