@@ -36,7 +36,7 @@ kod je u grani `rjesenja`.
 
 - **JDK 21** (preporuka: Eclipse Temurin 21)
 - **Maven 3.9+** (ili ugrađeni Maven u IntelliJ IDEA / VS Code)
-- IDE: IntelliJ IDEA, VS Code (Extension Pack for Java + Spring Boot) ili JetBrains Rider nije potreban (to je za .NET)
+- IDE: IntelliJ IDEA ili VS Code (Extension Pack for Java + Spring Boot Extension Pack + REST Client)
 
 Detaljne upute za postavljanje: [`docs/00-postavljanje-okruzenja.md`](docs/00-postavljanje-okruzenja.md).
 
