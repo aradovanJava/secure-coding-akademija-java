@@ -31,10 +31,11 @@ jobs:
           git config user.email "aleksander.radovan@gmail.com"
           if [ -n "$(git status --porcelain)" ]; then
             git add mvnw mvnw.cmd .mvn
-            git commit -m "Dodaj Maven Wrapper (generiran kroz GitHub Actions)
-
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01XPnKLU6QN1RaaAunq9Gqxa"
+            printf '%s\n\n%s\n%s\n' \
+              "Dodaj Maven Wrapper (generiran kroz GitHub Actions)" \
+              "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>" \
+              "Claude-Session: https://claude.ai/code/session_01XPnKLU6QN1RaaAunq9Gqxa" > /tmp/wrapper_msg.txt
+            git commit -F /tmp/wrapper_msg.txt
             git push
           else
             echo "Nema promjena (wrapper vec postoji)."
