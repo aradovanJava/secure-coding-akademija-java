@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "VulnShop (Spring Boot)",
+      "request": "launch",
+      "mainClass": "hr.span.akademija.vulnshop.VulnShopApplication",
+      "projectName": "vulnshop-akademija",
+      "console": "internalConsole"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/usage.statistics.xml
+.idea/shelf/
+*.iml
+.vscode/*.log
+
+# .NET (zajednicki repo konvencije)
+bin/
+obj/
+.vs/
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logovi
+*.log
+build.log
+reports/

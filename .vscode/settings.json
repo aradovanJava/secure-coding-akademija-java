@@ -1,0 +1,16 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.test.config": {
+    "vmArgs": []
+  },
+  "java.compile.nullAnalysis.mode": "disabled",
+  "rest-client.environmentVariables": {
+    "$shared": {
+      "host": "http://localhost:8080"
+    }
+  },
+  "files.eol": "\n",
+  "[java]": {
+    "editor.tabSize": 4
+  }
+}
